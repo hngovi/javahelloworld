@@ -1,11 +1,27 @@
 pipeline {
     agent any
     stages {
+        stage('Sonarqube analysis') {
+            steps {
+               echo 'Running analysis...'
+               withSonarQubeEnv('sonarqube') {
+                   sh "mvn sonar:sonar"
+               }
+            }
+        }
+
+        stage('Quality gate') {
+            steps {
+               echo 'Waiting for quality gate...'
+               waitForQualityGate abortPipeline: true
+            }
+        }
+
         stage('build') {
             steps {
-                sh 'export MAVEN_HOME=/var/jenkins_home/apache-maven-3.6.3'
-                sh '$MAVEN_HOME/bin/mvn --version'
-				sh '$MAVEN_HOME/bin/mvn clean package'
+                echo 'Build...'
+                sh 'mvn --version'
+				sh 'mvn clean package'
             }
         }
     }
