@@ -4,9 +4,8 @@ pipeline {
         stage('build') {
             steps {
                 sh 'export MAVEN_HOME=/var/jenkins_home/apache-maven-3.6.3'
-                sh 'export PATH=$PATH:$MAVEN_HOME/bin'
-                sh 'mvn --version'
-				sh 'mvn clean package'
+                sh '$MAVEN_HOME/bin/mvn --version'
+				sh '$MAVEN_HOME/bin/mvn clean package'
             }
         }
     }
